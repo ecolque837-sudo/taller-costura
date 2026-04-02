@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Trabajador</title>
+</head>
+
+<body>
+
+<h2>🧵 Registro Taller</h2>
+
+<input type="text" id="nombre" placeholder="Nombre trabajador"><br><br>
+<input type="text" id="prenda" placeholder="Prenda"><br><br>
+<input type="number" id="cantidad" placeholder="Cantidad"><br><br>
+<input type="number" id="precio" placeholder="Precio"><br><br>
+
+<button onclick="enviar()">Enviar</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyADG4qmwXXTKg96R9At3VfnXeFyPwupeCo",
+authDomain: "taller-costura-91064.firebaseapp.com",
+projectId: "taller-costura-91064",
+storageBucket: "taller-costura-91064.firebasestorage.app",
+messagingSenderId: "502942390768",
+appId: "1:502942390768:web:6f36fd874fb0fbfa86e535"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.enviar = async function(){
+
+let nombre = document.getElementById("nombre").value;
+let prenda = document.getElementById("prenda").value;
+let cantidad = document.getElementById("cantidad").value;
+let precio = document.getElementById("precio").value;
+
+let total = cantidad * precio;
+
+await addDoc(collection(db,"costura"),{
+nombre,
+prenda,
+cantidad,
+precio,
+total,
+fecha:new Date().toLocaleDateString()
+});
+
+alert("Enviado correctamente");
+}
+
+</script>
+
+</body>
+</html>

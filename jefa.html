@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Jefa</title>
+
+<style>
+body{font-family:Arial;padding:20px;background:#f5f6fa}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+table,th,td{border:1px solid #ddd}
+th,td{padding:8px;text-align:center}
+.total{font-size:20px;font-weight:bold;margin-top:15px}
+</style>
+
+</head>
+
+<body>
+
+<h2>👩‍💼 Panel Jefa - Taller de Costura</h2>
+
+<div class="total">Total General: R$ <span id="total">0</span></div>
+
+<table>
+<thead>
+<tr>
+<th>Trabajador</th>
+<th>Prenda</th>
+<th>Cantidad</th>
+<th>Precio</th>
+<th>Total</th>
+<th>Fecha</th>
+</tr>
+</thead>
+<tbody id="tabla"></tbody>
+</table>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyADG4qmwXXTKg96R9At3VfnXeFyPwupeCo",
+authDomain: "taller-costura-91064.firebaseapp.com",
+projectId: "taller-costura-91064",
+storageBucket: "taller-costura-91064.firebasestorage.app",
+messagingSenderId: "502942390768",
+appId: "1:502942390768:web:6f36fd874fb0fbfa86e535"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const tabla = document.getElementById("tabla");
+
+onSnapshot(collection(db,"costura"), (snapshot)=>{
+
+tabla.innerHTML="";
+let totalGeneral = 0;
+
+snapshot.forEach(doc=>{
+
+let d = doc.data();
+totalGeneral += Number(d.total);
+
+tabla.innerHTML += `
+<tr>
+<td>${d.nombre}</td>
+<td>${d.prenda}</td>
+<td>${d.cantidad}</td>
+<td>${d.precio}</td>
+<td>${d.total}</td>
+<td>${d.fecha}</td>
+</tr>
+`;
+
+});
+
+document.getElementById("total").innerText = totalGeneral;
+
+});
+
+</script>
+
+</body>
+</html>
